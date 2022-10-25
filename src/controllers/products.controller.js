@@ -21,11 +21,12 @@ const getProducts = async (req, res) => {
 const createProduct = async (req, res) => {
   const { name } = req.body;
 
-  const result = await productService.createProduct(name);
+  const { data, error, code } = await productService.createProduct(name);
 
   // if (type) return res.status(errorMap.mapError(type)).json(message);
 
-  res.status(201).json(result.message);
+  if (error) return res.status(code).json(error);
+  return res.status(code).json(data);
 };
 
 const updateProduct = async (req, res) => {
@@ -38,21 +39,18 @@ const updateProduct = async (req, res) => {
   if (error) return res.status(code).json(error);
   return res.status(code).json(data);
 };
-// const deleteProduct = async (req, res) => {
-//   const { id } = req.params;
-//   const notFound = await productService.findById(id);
 
-//   if (!notFound.message) {
-//     return res.status(404).json({ message: 'Product not found' });
-//   }
-//   await productService.deletedById(id);
-//   return res.status(204).json([]);
-// };
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  const { data, error, code } = await productService.deleteProduct(id);
+  if (error) return res.status(code).json(error);
+  return res.status(code).json(data);
+};
 
 module.exports = {
   listProducts,
   getProducts,
   createProduct,
   updateProduct,
-  // deleteProduct,
+  deleteProduct,
 };
