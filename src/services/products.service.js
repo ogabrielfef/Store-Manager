@@ -19,15 +19,13 @@ const createProduct = async (name) => {
   if (!name) {
     return { error: { message: '"name" is required' }, code: 400 };
   }
-
   if (name.length < 5) {
     return { error: { message: '"name" length must be at least 5 characters long' }, code: 422 };
   }
-
   const newProductId = await productModel.insert(name);
   const newProduct = await productModel.findById(newProductId);
 
-  return { type: null, message: newProduct };
+  return { code: 201, data: newProduct };
 };
 
 const updateProduct = async ({ id, name }) => {

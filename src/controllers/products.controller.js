@@ -20,11 +20,7 @@ const getProducts = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const { name } = req.body;
-
   const { data, error, code } = await productService.createProduct(name);
-
-  // if (type) return res.status(errorMap.mapError(type)).json(message);
-
   if (error) return res.status(code).json(error);
   return res.status(code).json(data);
 };
@@ -43,7 +39,7 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
   const { data, error, code } = await productService.deleteProduct(id);
-  if (error) return res.status(code).json(error);
+if (error) return res.status(code).json(error);
   return res.status(code).json(data);
 };
 
