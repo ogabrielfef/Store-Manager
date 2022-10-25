@@ -7,12 +7,9 @@ const findAllSales = async () => {
 };
 
 const findSalesById = async (productId) => {
-  // const errror = validateId(productId);
-  // if (errror.type) return errror;
-
   const sales = await salesModel.findSalesById(productId);
-  if (sales) return { type: null, message: sales };
-  return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  if (sales.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  return { type: null, message: sales };
 };
 
 module.exports = {
