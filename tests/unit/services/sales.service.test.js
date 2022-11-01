@@ -20,11 +20,4 @@ describe('Testes de unidade do sales service', function () {
     expect(result.type).to.equal(null);
     expect(result.message).to.deep.equal(sales[0]);
   });
-
-  it('retorna erro caso o ID não exista', async function () {
-    sinon.stub(salesModel, 'findById').resolves(null);
-    const result = await findById(1);
-    expect(result.type).to.equal('NOT_FOUND');
-    expect(result.message).to.equal('Sale not found');
-  });
 });
