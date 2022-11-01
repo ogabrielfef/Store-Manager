@@ -45,4 +45,39 @@ describe('Testes de unidade do sales controller', function () {
     expect(res.status).to.have.been.calledWith(200);
     expect(res.json).to.be.calledWith(sales[0]);
   });
+
+  it('Deletando uma venda', async function () {
+    const res = {};
+    const req = {
+      params: 1,
+    };
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    sinon
+      .stub(salesService, 'deleteSales')
+      .resolves({ type: null, message: '' });
+
+    await salesController.deleteSales(req, res);
+
+    expect(res.status).to.have.been.calledWith(204);
+  });
+
+  it('Erro ao tentar deletar venda inexistente', async function () {
+    const res = {};
+    const req = {
+      params: 1,
+    };
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    sinon
+      .stub(salesService, 'deleteSales')
+      .resolves({ type: 'NOT_FOUND', message: 'Sales not found' });
+
+    await salesController.deleteSales(req, res);
+
+    expect(res.status).to.have.been.calledWith(404);
+    expect(res.json).to.have.been.calledWith({ message: 'Sales not found' });
+  });
 });
