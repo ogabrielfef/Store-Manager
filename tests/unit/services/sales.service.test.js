@@ -1,37 +1,30 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-
-const { findAllSales, findSalesById } = require('../../../src/services/sales.service');
-const { salesModel } = require('../../../src/models');
-
-const { vendas } = require('./mocks/sales.service.mock');
-
+const { findAll, findById } = require('../../../src/services/sales.service')
+const salesModel = require('../../../src/models/sales.model');
+const { sales } = require('./mocks/sales.service.mock');
 const sinonChai = require('sinon-chai');
 
-describe('Listando vendas', function () {
+describe('Testes de unidade do sales service', function () {
   afterEach(sinon.restore);
 
-  it('lista todas as vendas', async function () {
-    sinon.stub(salesModel, 'findAllSales').resolves(vendas);
-    const result = await findAllSales();
-    expect(result.message).to.deep.equal(vendas);
+  it('retorna a lista completa de vendas', async function () {
+    sinon.stub(salesModel, 'findAll').resolves(sales);
+    const result = await findAll();
+    expect(result.message).to.deep.equal(sales);
   });
 
-  it('retorna um erro caso a venda não exista', async function () {
-    sinon.stub(salesModel, 'findSalesById').resolves(undefined);
-
-    const result = await findSalesById(1);
-
-    expect(result.type).to.equal('SALE_NOT_FOUND');
-    expect(result.message).to.equal('Sale not found');
-  });
-
-  it('retorna o venda caso ID existenta', async function () {
-    sinon.stub(salesModel, 'findSalesById').resolves(vendas[0]);
-
-    const result = await findSalesById(1);
-
+  it('retorna a venda caso o ID exista', async function () {
+    sinon.stub(salesModel, 'findById').resolves(sales[0]);
+    const result = await findById(1);
     expect(result.type).to.equal(null);
-    expect(result.message).to.deep.equal(vendas[0]);
+    expect(result.message).to.deep.equal(sales[0]);
+  });
+
+  it('retorna erro caso o ID não exista', async function () {
+    sinon.stub(salesModel, 'findById').resolves(null);
+    const result = await findById(1);
+    expect(result.type).to.equal('NOT_FOUND');
+    expect(result.message).to.equal('Sale not found');
   });
 });

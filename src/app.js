@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { productRoutes, salesRouter } = require('./routers');
+const { productRoutes, salesRoutes } = require('./routers');
 
 const app = express();
 app.use(express.json());
@@ -11,8 +11,8 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', productRoutes);
+app.use('/sales', salesRoutes);
 
-app.use('/sales', salesRouter);
 // app.get('/products', async (req, res) => {
 //   const products = await productService.findAll();
 

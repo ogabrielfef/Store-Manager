@@ -22,8 +22,11 @@ const newProductMock = {
   name: 'ProdutoX',
 }
 
+const productMockInvalid = {};
+
 module.exports = {
   products,
   productMock,
   newProductMock,
+  productMockInvalid,
 };

@@ -7,6 +7,20 @@ const validateId = (id) => {
   return { type: null, message: '' };
 };
 
+const MESSAGE_LENGTH = '"name" length must be at least 5 characters long';
+const MESSAGE_REQUIRED = '"name" is required';
+
+const validateName = (name) => {
+  if (!name) {
+    return { type: 'INVALID_VALUE', message: MESSAGE_REQUIRED };
+  }
+  if (name.length < 5) {
+    return { type: 'FORMAT_INVALID', message: MESSAGE_LENGTH };
+  }
+  return { type: null, message: '' };
+};
+
 module.exports = {
   validateId,
+  validateName,
 };

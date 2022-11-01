@@ -1,5 +1,7 @@
 const { productModel } = require('../models');
-const { validateId } = require('./validations/validationsValue');
+const { validateId, validateName } = require('./validations/validationsValue');
+
+const NOT_FOUND_PRODUCT = 'Product not found';
 
 const findAll = async () => {
   const products = await productModel.findAll();
@@ -12,46 +14,38 @@ const findById = async (productId) => {
 
   const products = await productModel.findById(productId);
   if (products) return { type: null, message: products };
-  return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+  return { type: 'NOT_FOUND', message: NOT_FOUND_PRODUCT };
 };
 
 const createProduct = async (name) => {
-  if (!name) {
-    return { error: { message: '"name" is required' }, code: 400 };
-  }
-  if (name.length < 5) {
-    return { error: { message: '"name" length must be at least 5 characters long' }, code: 422 };
-  }
+  const error = validateName(name);
+  if (error.type) return error;
+
   const newProductId = await productModel.insert(name);
   const newProduct = await productModel.findById(newProductId);
-
-  return { code: 201, data: newProduct };
+  if (newProduct) return { type: null, message: newProduct };
+  return { type: 'NOT_FOUND', message: NOT_FOUND_PRODUCT };
 };
 
 const updateProduct = async ({ id, name }) => {
-  if (!name) {
-    return { error: { message: '"name" is required' }, code: 400 };
-  }
-  if (name.length < 5) {
-    return { error: { message: '"name" length must be at least 5 characters long' }, code: 422 };
-  }
+  const error = validateName(name);
+  if (error.type) return error;
 
   const idProduct = await productModel.findById(id);
-  if (!idProduct) {
-    return { error: { message: 'Product not found' }, code: 404 };
+  if (idProduct) {
+    const product = await productModel.updateProduct({ id, name });
+    return { type: null, message: product };
   }
-
-  const product = await productModel.updateProduct({ id, name });
-  return { data: product, code: 200 };
+  return { type: 'NOT_FOUND', message: NOT_FOUND_PRODUCT };
 };
 
 const deleteProduct = async (productId) => {
   const productExist = await productModel.findById(productId);
-  if (!productExist) {
-    return { error: { message: 'Product not found' }, code: 404 };
+  if (productExist) {
+    await productModel.deleteProduct(productId);
+    return { type: null };
   }
-  await productModel.deleteProduct(productId);
-  return { code: 204 };
+  return { type: 'NOT_FOUND', message: NOT_FOUND_PRODUCT };
 };
 
 module.exports = {

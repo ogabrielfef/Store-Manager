@@ -20,27 +20,25 @@ const getProducts = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const { name } = req.body;
-  const { data, error, code } = await productService.createProduct(name);
-  if (error) return res.status(code).json(error);
-  return res.status(code).json(data);
+  const { type, message } = await productService.createProduct(name);
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+  return res.status(201).json(message);
 };
 
 const updateProduct = async (req, res) => {
-  console.log(req.params);
-  const { data, error, code,
-  } = await productService.updateProduct({
+  const { type, message } = await productService.updateProduct({
     ...req.params,
     ...req.body,
   });
-  if (error) return res.status(code).json(error);
-  return res.status(code).json(data);
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+  return res.status(200).json(message);
 };
 
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  const { data, error, code } = await productService.deleteProduct(id);
-if (error) return res.status(code).json(error);
-  return res.status(code).json(data);
+  const { type, message } = await productService.deleteProduct(id);
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+  return res.status(204).json();
 };
 
 module.exports = {

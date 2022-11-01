@@ -1,18 +1,18 @@
 const { salesModel } = require('../models');
-// const { validateId } = require('./validations/validationsValue');
 
-const findAllSales = async () => {
-  const sales = await salesModel.findAllSales();
+const findAll = async () => {
+  const sales = await salesModel.findAll();
   return { type: null, message: sales };
 };
 
-const findSalesById = async (productId) => {
-  const sales = await salesModel.findSalesById(productId);
-  if (sales.length === 0) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
-  return { type: null, message: sales };
+const findById = async (saleId) => {
+  const result = await salesModel.findById(saleId);
+  if (result.length === 0) return { type: 'NOT_FOUND', message: 'Sale not found' };
+  console.log(result);
+  return { type: null, message: result };
 };
 
 module.exports = {
-  findAllSales,
-  findSalesById,
+  findAll,
+  findById,
 };
