@@ -20,6 +20,9 @@ Irá inicializar um container chamado store_manager e outro chamado store_manage
 </br>
 </br>
 A partir daqui você pode rodar o container store_manager via CLI ou abri-lo no VS Code.
+</br>
+</br>
+Instale as dependências: npm install.
 
 </br>
 </br>
